@@ -6,8 +6,6 @@
 A Gleam package for parsing domain names into their component parts using the
 [Public Suffix List](https://publicsuffix.org/).
 
-Inspired by [publicsuffix-ruby](https://github.com/weppos/publicsuffix-ruby).
-
 ## Installation
 
 Add `psl` to your Gleam project:
