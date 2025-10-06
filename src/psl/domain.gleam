@@ -5,15 +5,17 @@ import gleam/list
 import gleam/string
 
 /// Represents the parsed components of a domain
+///
 /// Definitions
-/// top_level_domain or TLD is the last part of a domain name before the paths.
+///
+/// **top_level_domain** or TLD is the last part of a domain name before the paths.
 /// For example, in https://packages.gleam.run, "run" is the TLD.
 ///
-/// second_level_domain or SLD is the part of a domain name before the TLD,
+/// **second_level_domain** or SLD is the part of a domain name before the TLD,
 /// separated by a ".". For example, in https://packages.gleam.run, "gleam" is
 /// the SLD.
 ///
-/// transit_routing_domain or TRD is the first part of a domain name and may
+/// **transit_routing_domain** or TRD is the first part of a domain name and may
 /// have more than one part. For example, in https://packages.gleam.run,
 /// "packages" is the TRD and in https://cool.packages.gleam.run
 /// "cool.packages" is the TRD.
