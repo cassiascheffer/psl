@@ -208,21 +208,21 @@ pub fn private_domain_with_subdomain_with_private_test() {
   parts.subdomain_parts |> should.equal(["www"])
 }
 
-pub fn custom_list() {
+pub fn custom_list_test() {
   let list = psl.load_suffix_list(True, Some("priv/test_list.dat"))
-  let assert Ok(parts) = psl.parse("gleam.neat", list)
+  let assert Ok(parts) = psl.parse("https://gleam.neat", list)
   parts.transit_routing_domain |> should.equal("")
   parts.second_level_domain |> should.equal("gleam")
   parts.top_level_domain |> should.equal("neat")
   parts.subdomain_parts |> should.equal([])
 }
 
-pub fn adding_a_rule() {
+pub fn adding_a_rule_test() {
   let list = psl.load_suffix_list(True, Some("priv/test_list.dat"))
   let list = psl.add_rule(list, "gleam", True)
-  let assert Ok(parts) = psl.parse("gleam.gleam.gleam", list)
-  parts.transit_routing_domain |> should.equal("")
+  let assert Ok(parts) = psl.parse("https://gleam.gleam.gleam", list)
+  parts.transit_routing_domain |> should.equal("gleam")
   parts.second_level_domain |> should.equal("gleam")
   parts.top_level_domain |> should.equal("gleam")
-  parts.subdomain_parts |> should.equal([])
+  parts.subdomain_parts |> should.equal(["gleam"])
 }
