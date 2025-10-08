@@ -12,3 +12,4 @@ idna = ">= 6.0.0 and < 7.0.0"
 
 [dev-dependencies]
 gleeunit = ">= 1.0.0 and < 2.0.0"
+global_value = ">= 1.0.0 and < 2.0.0"
