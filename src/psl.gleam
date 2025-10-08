@@ -7,6 +7,16 @@ import gleam/string
 import gleam/uri
 import simplifile
 
+const splat = "*"
+
+const dot = "."
+
+const bang = "!"
+
+const comment_marker = "//"
+
+const private_marker = "===BEGIN PRIVATE DOMAINS==="
+
 /// Represents the parsed components of a domain
 ///
 /// Definitions
@@ -68,9 +78,6 @@ pub fn load_suffix_list(
   }
 
   let assert Ok(content) = simplifile.read(from: file_path)
-  let comment = "//"
-  let private_marker = "===BEGIN PRIVATE DOMAINS==="
-
   let domain_data = case include_private {
     True -> content
     False -> {
@@ -100,7 +107,7 @@ pub fn load_suffix_list(
             }
           False -> {
             // Skip empty lines and comments
-            case trimmed == "" || string.starts_with(trimmed, comment) {
+            case trimmed == "" || string.starts_with(trimmed, comment_marker) {
               True -> acc
               False -> #(add_rule(sl, trimmed, is_public), is_public)
             }
@@ -154,7 +161,7 @@ pub fn parse(
 /// * Exceptions start with a "!".
 /// * Wildcards start with a "*".
 pub fn add_rule(sl: SuffixList, rule: String, is_public: Bool) -> SuffixList {
-  case string.starts_with(rule, "!") {
+  case string.starts_with(rule, bang) {
     True -> {
       let suffix_str = string.drop_start(rule, 1)
       let suffix = Suffix(suffix_str, is_public, string.length(suffix_str))
@@ -164,7 +171,7 @@ pub fn add_rule(sl: SuffixList, rule: String, is_public: Bool) -> SuffixList {
       )
     }
     False ->
-      case string.starts_with(rule, "*" <> ".") {
+      case string.starts_with(rule, splat <> ".") {
         True -> {
           let pattern = string.drop_start(rule, 2)
           let suffix = Suffix(pattern, is_public, string.length(pattern))
@@ -187,8 +194,8 @@ fn extract_parts(
   host: String,
   suffix: String,
 ) -> Result(DomainParts, ParseError) {
-  let host_labels = string.split(host, ".")
-  let suffix_labels = string.split(suffix, ".")
+  let host_labels = string.split(host, dot)
+  let suffix_labels = string.split(suffix, dot)
 
   case list.length(host_labels) <= list.length(suffix_labels) {
     True -> Error(InvalidDomain)
@@ -234,7 +241,7 @@ fn decode_domain(domain: String) -> String {
 
 /// Find the matching public suffix for a hostname
 fn find_suffix(host: String, suffix_list: SuffixList) -> Result(String, Nil) {
-  let labels = string.split(host, ".")
+  let labels = string.split(host, dot)
 
   // Try to find the longest matching suffix
   let matches = find_all_matches(labels, suffix_list)
