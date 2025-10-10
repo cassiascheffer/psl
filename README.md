@@ -11,7 +11,7 @@ A Gleam package for parsing domain names into their component parts using the
 Add `psl` to your Gleam project:
 
 ```sh
-gleam add psl
+gleam add psl@2
 ```
 
 ## Usage
